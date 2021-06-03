@@ -1,5 +1,5 @@
 {
-  "domain": "marantz",
+  "domain": "marantzusb",
   "name": "Marantz",
   "documentation": "https://github.com/Imperial-Guard/marantz_tcp",
   "dependencies": [],
@@ -7,5 +7,3 @@
   "requirements": []
   "version": "1.0"
 }
-
-
