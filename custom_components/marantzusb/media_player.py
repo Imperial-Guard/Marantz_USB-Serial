@@ -9,7 +9,7 @@ import logging
 import voluptuous as vol
 
 from homeassistant.components.media_player import (
-    MediaPlayerDevice,
+    MediaPlayerEntity,
     PLATFORM_SCHEMA)
 from homeassistant.components.media_player.const import (
     SUPPORT_VOLUME_SET,
@@ -59,7 +59,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     )], True)
 
 
-class Marantz(MediaPlayerDevice):
+class Marantz(MediaPlayerEntity):
     """Representation of a Marantz Receiver."""
 
     def __init__(self, name, marantz_receiver, min_volume, max_volume,
