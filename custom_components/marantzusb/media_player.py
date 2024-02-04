@@ -11,11 +11,8 @@ import voluptuous as vol
 from homeassistant.components.media_player import (
     MediaPlayerEntity,
     PLATFORM_SCHEMA)
-from homeassistant.components.media_player.const import (
-    SUPPORT_VOLUME_SET,
-    SUPPORT_VOLUME_MUTE, SUPPORT_TURN_ON, SUPPORT_TURN_OFF,
-    SUPPORT_VOLUME_STEP, SUPPORT_SELECT_SOURCE, SUPPORT_SELECT_SOUND_MODE
-)
+from homeassistant.components.media_player import MediaPlayerEntityFeature
+
 from homeassistant.const import (
     CONF_NAME, STATE_OFF, STATE_ON)
 import homeassistant.helpers.config_validation as cv
@@ -26,9 +23,9 @@ DEFAULT_NAME = 'Marantz Receiver'
 DEFAULT_MIN_VOLUME = -71
 DEFAULT_MAX_VOLUME = -1
 
-SUPPORT_MARANTZ = SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | \
-    SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_VOLUME_STEP | \
-    SUPPORT_SELECT_SOURCE | SUPPORT_SELECT_SOUND_MODE 
+SUPPORT_MARANTZ = MediaPlayerEntityFeature.VOLUME_SET | MediaPlayerEntityFeature.VOLUME_MUTE | \
+    MediaPlayerEntityFeature.TURN_ON | MediaPlayerEntityFeature.TURN_OFF | MediaPlayerEntityFeature.VOLUME_STEP | \
+    MediaPlayerEntityFeature.SELECT_SOURCE | MediaPlayerEntityFeature.SELECT_SOUND_MODE 
 
 CONF_SERIAL_PORT = 'serial_port'
 CONF_MIN_VOLUME = 'min_volume'
