@@ -11,11 +11,8 @@ import voluptuous as vol
 from homeassistant.components.media_player import (
     MediaPlayerEntity,
     PLATFORM_SCHEMA)
-from homeassistant.components.media_player.const import (
-    SUPPORT_VOLUME_SET,
-    SUPPORT_VOLUME_MUTE, SUPPORT_TURN_ON, SUPPORT_TURN_OFF,
-    SUPPORT_VOLUME_STEP, SUPPORT_SELECT_SOURCE, SUPPORT_SELECT_SOUND_MODE
-)
+from homeassistant.components.media_player import MediaPlayerEntityFeature
+
 from homeassistant.const import (
     CONF_NAME, STATE_OFF, STATE_ON)
 import homeassistant.helpers.config_validation as cv
@@ -26,15 +23,16 @@ DEFAULT_NAME = 'Marantz Receiver'
 DEFAULT_MIN_VOLUME = -71
 DEFAULT_MAX_VOLUME = -1
 
-SUPPORT_MARANTZ = SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | \
-    SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_VOLUME_STEP | \
-    SUPPORT_SELECT_SOURCE | SUPPORT_SELECT_SOUND_MODE 
+SUPPORT_MARANTZ = MediaPlayerEntityFeature.VOLUME_SET | MediaPlayerEntityFeature.VOLUME_MUTE | \
+    MediaPlayerEntityFeature.TURN_ON | MediaPlayerEntityFeature.TURN_OFF | MediaPlayerEntityFeature.VOLUME_STEP | \
+    MediaPlayerEntityFeature.SELECT_SOURCE | MediaPlayerEntityFeature.SELECT_SOUND_MODE 
 
 CONF_SERIAL_PORT = 'serial_port'
 CONF_MIN_VOLUME = 'min_volume'
 CONF_MAX_VOLUME = 'max_volume'
 CONF_SOURCE_DICT = 'sources'
 CONF_SOUNDMODE_DICT = 'soundmode'
+CONF_UNIQUE_ID = 'unique_id'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_SERIAL_PORT): cv.string,
@@ -43,6 +41,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_MAX_VOLUME, default=DEFAULT_MAX_VOLUME): int,
     vol.Optional(CONF_SOURCE_DICT, default={}): {cv.string: cv.string},
     vol.Optional(CONF_SOUNDMODE_DICT, default={}): {cv.string: cv.string},
+    vol.Optional(CONF_UNIQUE_ID, default=''): cv.string,
 })
 
 
@@ -55,7 +54,8 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         config.get(CONF_MIN_VOLUME),
         config.get(CONF_MAX_VOLUME),
         config.get(CONF_SOURCE_DICT),
-        config.get(CONF_SOUNDMODE_DICT)
+        config.get(CONF_SOUNDMODE_DICT),
+        config.get(CONF_UNIQUE_ID)
     )], True)
 
 
@@ -63,7 +63,7 @@ class Marantz(MediaPlayerEntity):
     """Representation of a Marantz Receiver."""
 
     def __init__(self, name, marantz_receiver, min_volume, max_volume,
-                 source_dict, sound_mode_dict):
+                 source_dict, sound_mode_dict, unique_id):
         """Initialize the Marantz Receiver device."""
         self._name = name
         self._marantz_receiver = marantz_receiver
@@ -75,6 +75,7 @@ class Marantz(MediaPlayerEntity):
                                  self._source_dict.items()}
         self._reverse_mapping_sound_mode = {value: "0{}".format(key) for key, value in
                                  self._sound_mode_dict.items()}
+        self._unique_id = unique_id
 
         self._volume = self._state = self._mute = self._source = None
 
@@ -197,3 +198,8 @@ class Marantz(MediaPlayerEntity):
     def sound_mode_list(self):
         """List of available sound_modes."""
         return sorted(list(self._reverse_mapping_sound_mode.keys()))
+
+    @property
+    def unique_id(self):
+        return self._unique_id
+
