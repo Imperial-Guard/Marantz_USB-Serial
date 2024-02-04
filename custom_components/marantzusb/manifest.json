@@ -1,7 +1,7 @@
 {
   "domain": "marantzusb",
   "name": "Marantz",
-  "documentation": "https://github.com/Imperial-Guard/marantz_tcp",
+  "documentation": "https://github.com/Imperial-Guard/marantzusb",
   "dependencies": [],
   "codeowners": [],
   "requirements": [],
